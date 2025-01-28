@@ -1,0 +1,30 @@
+{
+  "name": "react-ohttp",
+  "author": "dhoniaridho",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "vite build"
+  },
+  "type": "module",
+  "dependencies": {
+    "@tanstack/react-query": "^5.65.1",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "axios": "^1.7.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.11",
+    "vite-plugin-dts": "^4.5.0"
+  },
+  "main": "dist/index.umd.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  }
+}
