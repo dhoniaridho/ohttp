@@ -1,7 +1,9 @@
 {
   "name": "react-ohttp",
+  "description": "Simple react http client wrapper for axios and @tanstack/react-query",
   "author": "dhoniaridho",
   "version": "0.0.0",
+  "repository": "https://github.com/dhoniaridho/ohttp",
   "scripts": {
     "build": "vite build"
   },
