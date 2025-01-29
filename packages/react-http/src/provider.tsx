@@ -11,16 +11,13 @@ export default function Provider({
   baseURL,
   client,
 }: {
-  children: ReactNode;
+  children: React.JSX.Element;
   baseURL: string;
   client: QueryClient;
 }) {
   return (
     <HttpContext.Provider value={{ baseURL: baseURL }}>
-      <>
-        <QueryClientProvider client={client} />
-        {children}
-      </>
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
     </HttpContext.Provider>
   );
 }
