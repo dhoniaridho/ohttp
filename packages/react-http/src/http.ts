@@ -1,4 +1,8 @@
-import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import type {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
 import {
   type UseQueryOptions,
   type UseMutationOptions,
@@ -6,20 +10,14 @@ import {
   useMutation,
   UndefinedInitialDataOptions,
 } from "@tanstack/react-query";
-import axios from "axios";
 import * as React from "react";
 import { HttpContext } from "./provider";
-
-export const http = ({ baseURL }: { baseURL: string }) => {
-  return axios.create({
-    baseURL: baseURL,
-  });
-};
 
 type Config<TData = any, TError = DefaultError> = {
   method?: "GET" | "HEAD" | "POST" | "OPTIONS" | "PUT" | "DELETE" | "PATCH";
   keys?: any[];
-  params?: Record<string, any>;
+  searchParams?: Record<string, any>;
+  vars?: Record<string, any>;
   httpOptions?: AxiosRequestConfig;
   queryOptions?: UseQueryOptions<TData, TError>;
 };
@@ -57,7 +55,7 @@ export function useHttp<TData = any, TError = any>(
     queryFn: async () => {
       try {
         const defaultConfig = {
-          url,
+          url: replaceDynamicParams(url, options?.vars ?? {}),
         };
 
         if (options?.httpOptions) {
@@ -70,10 +68,10 @@ export function useHttp<TData = any, TError = any>(
           Object.assign(defaultConfig, { method: "GET" });
         }
 
-        if (options?.params) {
-          Object.assign(defaultConfig, { params: options.params });
+        if (options?.searchParams) {
+          Object.assign(defaultConfig, { params: options.searchParams });
         }
-        const { data } = await http(config).request<TData>(defaultConfig);
+        const { data } = await config.axios.request<TData>(defaultConfig);
         return data ?? null;
       } catch (e: any) {
         Promise.reject(e?.response ?? e);
@@ -147,21 +145,22 @@ export function useHttpMutation<
     {
       body?: FormData | any;
       headers?: Record<string, string>;
-      params?: Record<string, string>;
-      pathVars?: Record<string, string>;
+      searchParam?: Record<string, string>;
+      vars?: Record<string, string>;
     }
   >({
     mutationFn: (value) => {
       return new Promise<TData>((resolve, reject) => {
         const cfg = {
-          url: replaceDynamicParams(url, value.pathVars ?? {}),
+          url: replaceDynamicParams(url, value.vars ?? {}),
           method: options.method,
           ...options.httpOptions,
+          params: value.searchParam,
         };
 
         const val = value as {
           headers?: Record<string, string>;
-          params?: Record<string, string>;
+          searchParams?: Record<string, string>;
           body?: FormData | TVariables;
         };
 
@@ -169,15 +168,15 @@ export function useHttpMutation<
           Object.assign(cfg, { headers: val.headers });
         }
 
-        if (val.params) {
-          Object.assign(cfg, { params: val.params });
+        if (val.searchParams) {
+          Object.assign(cfg, { params: val.searchParams });
         }
 
         if (val.body) {
           Object.assign(cfg, { data: val.body });
         }
 
-        return http(config)
+        return config.axios
           .request<TData>(cfg)
           .then((response) => {
             resolve(response.data);
