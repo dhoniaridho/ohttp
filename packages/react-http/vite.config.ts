@@ -12,5 +12,8 @@ export default defineConfig({
       formats: ["es", "umd"],
       name: "react-ohttp",
     },
+    rollupOptions: {
+      external: ["react", "react/jsx-runtime"],
+    },
   },
 });

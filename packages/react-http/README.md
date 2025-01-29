@@ -7,13 +7,13 @@ This package provides a set of React hooks for making HTTP requests.
 You can install the package using npm or yarn:
 
 ```bash
-npm install @ohttp/react-http
+npm install react-ohttp
 ```
 
 or
 
 ```bash
-yarn add @ohttp/react-http
+pnpm add react-ohttp
 ```
 
 ## Usage

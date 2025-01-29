@@ -2,7 +2,7 @@
   "name": "react-ohttp",
   "description": "Simple react http client wrapper for axios and @tanstack/react-query",
   "author": "dhoniaridho",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/dhoniaridho/ohttp",
   "scripts": {
     "build": "vite build"
@@ -21,7 +21,8 @@
     "vite": "^6.0.11",
     "vite-plugin-dts": "^4.5.0"
   },
-  "main": "dist/index.umd.js",
+  "types": "./dist/types/index.d.ts",
+  "main": "./dist/index.es.js",
   "exports": {
     ".": {
       "import": "./dist/index.es.js",

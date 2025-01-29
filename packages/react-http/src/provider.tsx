@@ -17,8 +17,10 @@ export default function Provider({
 }) {
   return (
     <HttpContext.Provider value={{ baseURL: baseURL }}>
-      {children}
-      <QueryClientProvider client={client}></QueryClientProvider>
+      <>
+        <QueryClientProvider client={client} />
+        {children}
+      </>
     </HttpContext.Provider>
   );
 }

@@ -5,7 +5,7 @@ import App from "./App.tsx";
 import { HttpProvider } from "react-ohttp";
 import { QueryClient } from "@tanstack/react-query";
 
-
+console.log(HttpProvider)
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
