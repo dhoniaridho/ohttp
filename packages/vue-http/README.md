@@ -1,76 +1,39 @@
-# React HTTP
+# Vue HTTP
 
-This package provides a set of React hooks for making HTTP requests.
+This package provides a set of Vue hooks for making HTTP requests.
 
 ## Installation
 
 You can install the package using npm or yarn:
 
 ```bash
-npm install react-ohttp
+npm install vue-ohttp
 ```
 
 or
 
 ```bash
-pnpm add react-ohttp
+pnpm add vue-ohttp
 ```
 
 ## Usage
-
-### Register the Provider to the Root Application
-
-```jsx
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
-import { HttpProvider } from "react-ohttp";
-import { QueryClient } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
-
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <HttpProvider
-      client={queryClient}
-      baseURL="https://jsonplaceholder.typicode.com/"
-      beforeRequest={(config) => {
-        console.log(config);
-        config.headers.Authorization = `Bearer ${Math.random()}`;
-        return config;
-      }}
-      onFulfill={(response) => {
-        console.log(response);
-        return response;
-      }}
-      onReject={(error) => {
-        console.log(error);
-        throw error;
-      }}
-    >
-      <App />
-    </HttpProvider>
-  </StrictMode>
-);
-```
 
 ### useHttp
 
 The `useHttp` hook is used to make HTTP requests with various methods.
 
 ```jsx
-import React from "react";
-import { useHttp } from "react-ohttp";
+import Vue from "vue";
+import { useHttp } from "vue-http";
 
 const ExampleComponent = () => {
   const { data, error, isLoading } = useHttp(
     "https://api.example.com/data/{id}",
     {
       method: "GET",
-      searchParams: { key: "value" },
+      searchParam: { key: "value" },
       vars: {
-        id: "123",
+        id: "1",
       },
     }
   );
@@ -94,23 +57,28 @@ export default ExampleComponent;
 The `useHttpMutation` hook is used to make HTTP requests with mutation methods like POST, PUT, DELETE, etc.
 
 ```jsx
-import React from "react";
-import { useHttpMutation } from "@ohttp/react-http";
+import Vue from "vue";
+import { useHttpMutation } from "vue-http";
 
 const ExampleComponent = () => {
-  const { mutate, isPending } = useHttpMutation("todo", { method: "POST" });
-
-  const onCreate = (data: object) => {
-    mutate(
-      {
-        body: data,
+  const { mutate, isLoading, isError, error } = useHttpMutation(
+    "https://api.example.com/data/{id}",
+    {
+      method: "POST",
+      httpOptions: { timeout: 30000 },
+      queryOptions: {
+        onSuccess: (data) => console.log(data),
+        onError: (error) => console.log(error),
       },
-      {
-        onError: (err) => {
-          alert(err.data.message);
-        },
-      }
-    );
+    }
+  );
+
+  const handleSubmit = (data) => {
+    mutate({
+      body: data,
+      searchParams: {},
+      vars: { id: "10" },
+    });
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -135,7 +103,7 @@ export default ExampleComponent;
   - `method` (string): The HTTP method to use (default is 'GET').
   - `params` (object): Query parameters to include in the request.
   - `httpOptions` (object): Additional Axios request configuration options.
-  - `queryOptions` (object): React Query options.
+  - `queryOptions` (object): Vue Query options.
 - Returns an object with the following properties:
   - `data`: The response data.
   - `error`: Any error that occurred.
@@ -147,7 +115,7 @@ export default ExampleComponent;
 - `options` (object): Configuration options for the request.
   - `method` (string): The HTTP method to use.
   - `httpOptions` (object): Additional Axios request configuration options.
-  - `queryOptions` (object): React Query options.
+  - `queryOptions` (object): Vue Query options.
 - Returns an object with the following properties:
   - `mutate`: A function to trigger the mutation.
   - `isLoading`: Whether the request is in progress.

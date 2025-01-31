@@ -1,0 +1,28 @@
+{
+  "name": "vue-ohttp",
+  "version": "0.0.2",
+  "description": "Simple vue http client wrapper for axios and @tanstack/vue-query",
+  "repository": "https://github.com/dhoniaridho/ohttp",
+  "main": "dist/index.es.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [
+    "vue",
+    "axios",
+    "vue-query"
+  ],
+  "author": "dhoniaridho",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.11",
+    "vite-plugin-dts": "^4.5.0"
+  },
+  "dependencies": {
+    "@tanstack/vue-query": "^5.65.0",
+    "axios": "^1.7.9",
+    "vue": "^3.5.13"
+  }
+}

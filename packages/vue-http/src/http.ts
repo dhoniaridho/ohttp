@@ -1,17 +1,17 @@
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from "axios";
+import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import {
   type UseQueryOptions,
   type UseMutationOptions,
   useQuery,
   useMutation,
-  UndefinedInitialDataOptions,
-} from "@tanstack/react-query";
-import * as React from "react";
-import { HttpContext } from "./provider";
+  UndefinedInitialQueryOptions,
+} from "@tanstack/vue-query";
+import { inject } from "vue";
+
+type HttpContextType = {
+  baseURL?: string;
+  axios: AxiosInstance;
+};
 
 type Config<TData = any, TError = DefaultError> = {
   method?: "GET" | "HEAD" | "POST" | "OPTIONS" | "PUT" | "DELETE" | "PATCH";
@@ -28,29 +28,29 @@ type DefaultError = {
 };
 
 /**
-* API GET Method request only.
-* @example
-    const { data: items, isLoading, isError } = useHttp<number, string>('/', {
-      keys: ['id']
-      queryOptions: {
-        onSuccess: function (data) {
-          return
+  * API GET Method request only.
+  * @example
+      const { data: items, isLoading, isError } = useHttp<number, string>('/', {
+        keys: ['id']
+        queryOptions: {
+          onSuccess: function (data) {
+            return
+          },
+          onError: function (data) {
+            data
+          },
         },
-        onError: function (data) {
-          data
-        },
-      },
-    })
-* @param url URL API
-* @param options HTTP Mutation Options
-*/
+      })
+  * @param url URL API
+  * @param options HTTP Mutation Options
+  */
 export function useHttp<TData = any, TError = any>(
   url: string,
   options?: Config<TData, TError>
 ) {
-  const config = React.useContext(HttpContext);
+  const config = inject<HttpContextType>("HttpContext") as HttpContextType;
 
-  const defaultOptions: UndefinedInitialDataOptions<TData, TError> = {
+  const defaultOptions: UndefinedInitialQueryOptions<TData, TError> = {
     queryKey: [url, options],
     queryFn: async () => {
       try {
@@ -110,34 +110,34 @@ function replaceDynamicParams(
 }
 
 /**
-   * Update data to the server.
-   * @example
-    const {mutate, isFetching, isError, error} =  useHttpMutation<TData, TError>('todos/:id', {
-      method: 'POST',
-      httpOptions: { // axios options
-        timeout: 30000,
-      },
-      queryOptions: { // vue-query options
-        onSuccess: function (data) {
-          console.log(data);
+     * Update data to the server.
+     * @example
+      const {mutate, isFetching, isError, error} =  useHttpMutation<TData, TError>('todos/:id', {
+        method: 'POST',
+        httpOptions: { // axios options
+          timeout: 30000,
         },
-        onError: function (data) {
-          console.log(data);
+        queryOptions: { // vue-query options
+          onSuccess: function (data) {
+            console.log(data);
+          },
+          onError: function (data) {
+            console.log(data);
+          },
         },
-      },
-      })
-      const onSubmitForm = (data) => {
-        mutate(data)
-      }
-   * @param url URL API
-   * @param options HTTP Mutation Options
-   */
+        })
+        const onSubmitForm = (data) => {
+          mutate(data)
+        }
+     * @param url URL API
+     * @param options HTTP Mutation Options
+     */
 export function useHttpMutation<
   TVariables = unknown,
   TData = unknown,
   TError = AxiosResponse<DefaultError>,
 >(url: string, options: HttpMutationOptions<TData, TError>) {
-  const config = React.useContext(HttpContext);
+  const config = inject<HttpContextType>("HttpContext") as HttpContextType;
 
   return useMutation<
     TData,
@@ -145,7 +145,7 @@ export function useHttpMutation<
     {
       body?: FormData | any;
       headers?: Record<string, string>;
-      searchParams?: Record<string, string>;
+      searchParam?: Record<string, string>;
       vars?: Record<string, string>;
     }
   >({
@@ -155,7 +155,7 @@ export function useHttpMutation<
           url: replaceDynamicParams(url, value.vars ?? {}),
           method: options.method,
           ...options.httpOptions,
-          params: value.searchParams,
+          params: value.searchParam,
         };
 
         const val = value as {

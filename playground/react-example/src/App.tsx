@@ -9,8 +9,11 @@ function App() {
     completed: boolean;
   };
 
-  const { data, isLoading } = useHttp<Todo[]>("todos", {
+  const { data, isLoading } = useHttp<Todo[]>("todos/{id}", {
     method: "GET",
+    vars: {
+      id: "test",
+    },
   });
 
   const { mutate, isPending } = useHttpMutation("todo", { method: "POST" });
@@ -47,7 +50,9 @@ function App() {
     >
       <div>List Todo</div>
       <div>
-        <button onClick={onCreate}>{isPending ? "Creating..." : "Create"}</button>
+        <button onClick={onCreate}>
+          {isPending ? "Creating..." : "Create"}
+        </button>
       </div>
       {isLoading && <div>Loading...</div>}
 
