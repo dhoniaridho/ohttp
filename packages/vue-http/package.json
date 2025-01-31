@@ -1,0 +1,23 @@
+{
+  "name": "vue-ohttp",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.es.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "dhoniaridho",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.11",
+    "vite-plugin-dts": "^4.5.0"
+  },
+  "dependencies": {
+    "@tanstack/vue-query": "^5.65.0",
+    "axios": "^1.7.9",
+    "vue": "^3.5.13"
+  }
+}
