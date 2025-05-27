@@ -33,9 +33,9 @@ export default function Provider({
   children,
   baseURL,
   client,
-  beforeRequest,
-  onFulfill,
-  onReject,
+  beforeRequest = (config) => config,
+  onFulfill = (response) => response,
+  onReject = (error) => error,
 }: HttpProviderProps) {
   const http = axios.create({
     baseURL: baseURL,
@@ -47,9 +47,7 @@ export default function Provider({
     });
   }
 
-  if (onFulfill) {
-    http.interceptors.response.use(onFulfill, onReject);
-  }
+  http.interceptors.response.use(onFulfill, onReject);
 
   return (
     <HttpContext.Provider
