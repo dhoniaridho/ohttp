@@ -1,5 +1,5 @@
 {
-  "name": "vue-ohttp",
+  "name": "@dhoniaridho/vue-ohttp",
   "version": "0.0.2",
   "description": "Simple vue http client wrapper for axios and @tanstack/vue-query",
   "repository": "https://github.com/dhoniaridho/ohttp",
